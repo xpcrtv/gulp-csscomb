@@ -5,34 +5,35 @@
 
 /* global describe, it */
 
-'use strict';
+"use strict";
 
-var assert = require('assert');
-var Vinyl = require('vinyl');
-var csscomb = require('./index');
+const assert = require("assert");
+const Vinyl = require("vinyl");
+const csscomb = require("./index");
 
-var cssinput = 'h1 { color: yellow; } \n h1 { font-size: 2em; }';
-var cssoutput = 'h1\n{\n    color: yellow;\n}\nh1\n{\n    font-size: 2em;\n}\n';
+const cssinput = "h1 { color: yellow; } \n h1 { font-size: 2em; }";
+const cssoutput =
+  "h1\n{\n    color: yellow;\n}\nh1\n{\n    font-size: 2em;\n}\n";
 
-describe('gulp-csscomb', function() {
-  it('should format CSS coding style', function (cb) {
+describe("gulp-csscomb", function () {
+  it("should format CSS coding style", function (cb) {
+    const stream = csscomb();
 
-    var stream = csscomb();
-
-    stream.once('data', function(file) {
-
+    stream.once("data", function (file) {
       // make sure it came out the same way it went in
       assert(file.isStream);
 
       // check the contents
-      assert.equal(String(file.contents), cssoutput);
+      assert.strictEqual(String(file.contents), cssoutput);
 
       cb();
     });
 
-    stream.write(new Vinyl({
-      path: 'style.css',
-      contents: new Buffer(cssinput)
-    }));
+    stream.write(
+      new Vinyl({
+        path: "style.css",
+        contents: Buffer.from(cssinput),
+      })
+    );
   });
 });
